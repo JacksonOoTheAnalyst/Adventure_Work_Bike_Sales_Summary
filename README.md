@@ -32,7 +32,10 @@ Fourth Page(Yearly Sales Comparison)
 
 ### Tools & Process
 
-- Downloading Lastest Data sets by connecting Data Sources in SQL Query Language.
+- Read this before downloading data sets (Credit to Owner Zaynab Awofeso) <<< Referencing
+  [Link].(https://medium.com/learning-sql/eadventureworks-database-427e59144bc0)
+  
+- Downloading Lastest Data sets by connecting Data Sources in SQL Query Language. [Link].(https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms)
 - Explore Download Data in POWER BI / Regrouping data for desired individual Analyzing.
 
 - Data Cleaning and Transformation have beed done by POWER BI
