@@ -1,0 +1,131 @@
+## Create Dim_Date Table for further Yearly Comparison Calculation (PYTD Vs YTD)
+
+Dim_Date =
+CALENDAR(
+    DATE(2020, 1, 1),
+    DATE(2024, 1, 1)
+)
+
+
+## Check Included Date in DIM_Date Comparison if included True if not False
+
+Inpast = 
+VAR lastsalesdate = MAX(DIM_Calendar[Date])
+VAR lastsalesdatePY = EDATE(lastsalesdate,-12)
+RETURN
+DIM_Date[Date] <= lastsalesdatePY
+
+
+## Create New Table (Switch Slicers)
+HOME Tab >>> Enter Data
+
+Set Name for Each Columns
+1.Sales
+2.Quantity
+3.Gross Profits
+
+Table Name - Slc_Values
+Column Name - Values
+
+
+
+----------------------------------------
+
+*** Create New Measure Table for Tidy and Clean Foldering 
+
+New Table ==>>> _Measures = 
+
+
+##Add Measures
+
+1.Total Measures
+
+-Total Sales 
+
+	Sales = SUM(Fact_InternetSales[SalesAmount])
+
+
+-Total Quantity
+
+	Quantity = SUM(Fact_InternetSales[OrderQuantity])
+
+
+-Total Cost
+
+	Cost = SUM(Fact_InternetSales[StandardProductCost])
+
+
+-Total Gross Profit
+
+	Gross Profit = [Sales] - [Cost]
+
+-----------------
+
+2.PYTD Meaures (Previous-Year_To_Date)
+
+-Sales (PYTD)
+
+PYTD_sales = 
+CALCULATE(
+    [Sales],
+    SAMEPERIODLASTYEAR(DIM_Date[Date]),
+    DIM_Date[Inpast] = TRUE
+)
+
+
+-Quantity (PYTD)
+
+PYTD_Quantity = 
+CALCULATE(
+    [Quantity],
+    SAMEPERIODLASTYEAR(DIM_Date[Date]),
+    DIM_Date[Inpast] = TRUE
+)
+
+
+-Gross Profit (PYTD)
+
+PYTD_GrossProfit = 
+CALCULATE(
+    [GrossProfit],
+    SAMEPERIODLASTYEAR(DIM_Date[Date]),
+    DIM_Date[Inpast] = TRUE
+)
+
+-------------------
+
+3.YTD Measures (Year_To_Date)
+
+-Sales (YTD)
+
+YTD_Sales = TOTALYTD([Sales], DIM_Calendar[Date])
+
+
+-Quantity (YTD)
+
+YTD_Quantity = TOTALYTD([Quantity], DIM_Calendar[Date])
+
+
+-Gross Profit (YTD)
+
+YTD_GrossProfit = TOTALYTD([Gross Profit], DIM_Calendar[Date])
+
+---------------------------------
+
+4.Creat Switch Measures (S_PYTD)
+
+S_PYTD = 
+VAR selected_value = SELECTEDVALUE(Slc_Values[Values])
+VAR result = SWITCH(selected_value,
+    "Sales", [PYTD_Sales],
+    "Quantity", [PYTD_Quantity],
+    "Gross Profits", [PYTD_GrossProfit],
+    BLANK()
+)
+RETURN
+result
+
+---- Test its in the Table Visual and add Slicer with switch table [Values] ----
+
+
+----------------------------------------------
